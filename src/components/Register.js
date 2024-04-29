@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../css/Register.css";
-import App from "../FirebaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";  // Import useNavigate
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -10,6 +10,7 @@ function Register() {
   const [userMessage, setUserMessage] = useState(""); // State to store user feedback message
 
   const auth = getAuth();
+  const navigate = useNavigate();  // Initialize the navigate function
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -28,6 +29,7 @@ function Register() {
         const user = userCredential.user;
         console.log(user); // You can remove this later
         setUserMessage("Registration successful! Welcome to our application.");
+        navigate('/dashboard');  // Navigate to dashboard on success
       })
       .catch((error) => {
         const errorCode = error.code;

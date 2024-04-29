@@ -1,0 +1,25 @@
+/* src/components/Dashboard.css */
+.dashboard {
+    text-align: center;
+    padding: 40px;
+  }
+  
+  .dashboard nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .dashboard nav ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .dashboard nav ul li a {
+    text-decoration: none;
+    color: #007BFF;
+  }
+  
+  .dashboard nav ul li a:hover {
+    text-decoration: underline;
+  }
+  

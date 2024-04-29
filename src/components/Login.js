@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import "../css/Login.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import "../css/Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");  // State for storing login error messages
-  const [loginSuccess, setLoginSuccess] = useState("");  // State for storing login success message
+  const [loginError, setLoginError] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState("");
+
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,16 +23,15 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
         setLoginSuccess("Login successful! Welcome back.");
-        setLoginError("");  // Clear any previous error messages
-        // You might want to redirect the user or change the application state
+        setLoginError("");
+        navigate('/dashboard'); // Navigate to dashboard on success
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setLoginError("Failed to login: " + errorMessage);  // Set error message
-        setLoginSuccess("");  // Clear any previous success messages
+        setLoginError("Failed to login: " + errorMessage);
+        setLoginSuccess("");
       });
   };
 
