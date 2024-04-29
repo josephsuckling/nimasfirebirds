@@ -1,0 +1,25 @@
+/* Home.css */
+.home-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .home-container h1 {
+    color: #333;
+  }
+  
+  .home-container p {
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .home-container nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .home-container nav ul li {
+    display: inline;
+    margin-right: 10px;
+  }
+  

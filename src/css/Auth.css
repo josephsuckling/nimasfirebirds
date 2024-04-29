@@ -1,0 +1,21 @@
+/* Auth.css */
+.auth-page {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-forms {
+    margin-bottom: 20px;
+}
+
+.toggle-text {
+    margin-top: 10px;
+}
+
+.toggle-button {
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
