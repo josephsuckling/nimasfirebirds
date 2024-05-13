@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchAutoParts } from '../api/FirestoreAPI';  // Adjust the path as necessary
+import { fetchAutoParts } from '../api/FirestoreAPI';
 import '../css/AutoPartsHub.css';
 
 function AutoPartsHub() {
     const [autoParts, setAutoParts] = useState([]);
+    const [cart, setCart] = useState([]);
+    const [showCart, setShowCart] = useState(false); // State to manage cart visibility
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,8 +17,38 @@ function AutoPartsHub() {
         });
     }, []);
 
+    const addToCart = (part) => {
+        const exists = cart.find(item => item.id === part.id);
+        if (exists) {
+            setCart(cart.map(item => item.id === part.id ? {...item, qty: item.qty + 1} : item));
+        } else {
+            setCart([...cart, {...part, qty: 1}]);
+        }
+    };
+
+    const removeFromCart = (partId) => {
+        const exists = cart.find(item => item.id === partId);
+        if (exists.qty === 1) {
+            setCart(cart.filter(item => item.id !== partId));
+        } else {
+            setCart(cart.map(item => item.id === partId ? {...item, qty: item.qty - 1} : item));
+        }
+    };
+
+    const toggleCart = () => {
+        setShowCart(!showCart);
+    };
+
     const handleCreateNewPart = () => {
-        navigate('/create-autopart');  // Navigate to the part creation page
+        navigate('/create-autopart');
+    };
+
+    const handleCheckout = () => {
+        const orderDetails = {
+            items: cart,
+            total: cart.reduce((total, item) => total + item.qty * item.price, 0)
+        };
+        console.log(orderDetails);
     };
 
     return (
@@ -37,10 +69,27 @@ function AutoPartsHub() {
                                 <img key={index} src={url} alt="Auto Part" style={{ width: "100px", margin: "10px" }} />
                             ))}
                         </div>
+                        <button onClick={() => addToCart(part)}>Add to Cart</button>
                     </div>
                 ))}
             </div>
             <button className="create-part-button" onClick={handleCreateNewPart}>+</button>
+            <button className="cart-button" onClick={toggleCart}>Cart</button>
+            {showCart && (
+                <div className="cart-overlay">
+                    <h2>Cart</h2>
+                    {cart.map(item => (
+                        <div key={item.id}>
+                            <h3>{item.name} x {item.qty}</h3>
+                            <p>{item.category}</p>
+                            <button onClick={() => removeFromCart(item.id)}>Remove</button>
+                        </div>
+                    ))}
+                    <h2>Total: ${cart.reduce((total, item) => total + item.qty * item.price, 0)}</h2>
+                    <button onClick={handleCheckout}>Checkout</button>
+                    <button onClick={toggleCart}>Close Cart</button>
+                </div>
+            )}
         </div>
     );
 }
