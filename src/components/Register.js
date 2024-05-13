@@ -3,6 +3,8 @@ import "../css/Register.css";
 import App from "../FirebaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";  // Import useNavigate
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+
 
 function Register() {
   const [username, setUsername] = useState("");

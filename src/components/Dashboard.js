@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Dashboard.css'; 
 
+
 function Dashboard() {
   return (
     <div className="dashboard">
@@ -13,6 +14,8 @@ function Dashboard() {
           <li><Link to="/profile">My Profile</Link></li>
           <li><Link to="/settings">Settings</Link></li>
           <li><Link to="/logout">Logout</Link></li>
+          <li><Link to="/autoparts-hub">View Auto Parts</Link></li>
+          <li><Link to="/manage-categories">Manage Categories</Link></li>
           {/* You can add more links or sections as needed */}
         </ul>
       </nav>

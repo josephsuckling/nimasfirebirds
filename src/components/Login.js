@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import "../css/Login.css";
+import { updateLoginAttempts } from "../api/FirestoreAPI";
 
 function Login() {
+  const [numberUnsuccessfulAttemptsAllowed, setNumberUnsuccessfulAttemptsAllowed] = useState(3); // Set the number of unsuccessful attempts allowed
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");

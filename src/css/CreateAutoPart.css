@@ -1,0 +1,40 @@
+.create-auto-part {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.create-auto-part form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.create-auto-part label {
+    margin-bottom: 5px;
+}
+
+.create-auto-part input[type="text"],
+.create-auto-part select,
+.create-auto-part input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.create-auto-part button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.create-auto-part button:hover {
+    background-color: #0056b3;
+}
