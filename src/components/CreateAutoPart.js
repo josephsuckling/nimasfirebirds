@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import '../css/CreateAutoPart.css';  // Assuming you have a corresponding CSS file
-import { saveAutoPart, getCategories } from '../api/FirestoreAPI';  // Import getCategories
+import '../css/CreateAutoPart.css';
+import { saveAutoPart, getCategories } from '../api/FirestoreAPI';
 
 function CreateAutoPart() {
     const [partData, setPartData] = useState({
+        name: '',
         dimensions: '',
         weight: '',
         color: '',
@@ -11,13 +12,14 @@ function CreateAutoPart() {
         models: '',
         manufacturer: '',
         warranty: '',
-        category: ''
+        category: '',
+        cost: '',
+        description: ''
     });
     const [images, setImages] = useState([]);
-    const [categories, setCategories] = useState([]);  // State to store categories
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        // Fetch categories when the component mounts
         const fetchCategoryData = async () => {
             const fetchedCategories = await getCategories();
             setCategories(fetchedCategories);
@@ -36,6 +38,10 @@ function CreateAutoPart() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (!partData.name || !partData.category || !partData.cost || !partData.description) {
+            alert("Please fill in all required fields.");
+            return;
+        }
         console.log(partData, images);
         try {
             const docId = await saveAutoPart(partData, images);
@@ -50,6 +56,15 @@ function CreateAutoPart() {
     return (
         <div className="create-auto-part">
             <form onSubmit={handleSubmit}>
+                <label>Name:
+                    <input type="text" name="name" value={partData.name} required onChange={handleInputChange} />
+                </label>
+                <label>Cost:
+                    <input type="text" name="cost" value={partData.cost} required onChange={handleInputChange} />
+                </label>
+                <label>Description:
+                    <textarea name="description" value={partData.description} required onChange={handleInputChange} />
+                </label>
                 <label>Dimensions:
                     <input type="text" name="dimensions" value={partData.dimensions} onChange={handleInputChange} />
                 </label>
@@ -72,7 +87,7 @@ function CreateAutoPart() {
                     <input type="text" name="warranty" value={partData.warranty} onChange={handleInputChange} />
                 </label>
                 <label>Category:
-                    <select name="category" value={partData.category} onChange={handleInputChange}>
+                    <select name="category" value={partData.category} required onChange={handleInputChange}>
                         <option value="">Select Category</option>
                         {categories.map(cat => (
                             <option key={cat.id} value={cat.name}>{cat.name}</option>
@@ -87,5 +102,4 @@ function CreateAutoPart() {
         </div>
     );
 }
-
 export default CreateAutoPart;

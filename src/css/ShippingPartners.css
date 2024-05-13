@@ -1,0 +1,49 @@
+.shipping-partners {
+    padding: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.partners-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.partner-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: calc(50% - 20px);
+}
+
+.partner-item h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.partner-item p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.add-partner-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.add-partner-button:hover {
+    background-color: #0056b3;
+}

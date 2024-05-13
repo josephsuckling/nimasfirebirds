@@ -1,0 +1,30 @@
+.add-partner-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between form elements */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: fit-content; /* Adjust width as needed */
+    margin: 0 auto; /* Center the form horizontally */
+  }
+  
+  .add-partner-form input[type="text"],
+  .add-partner-form input[type="email"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .add-partner-form button[type="submit"] {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* Indicate clickable button */
+  }
+  
+  .add-partner-form button[type="submit"]:hover {
+    background-color: #45A049; /* Darker green on hover */
+  }

@@ -153,3 +153,27 @@ export const deleteCategory = async (categoryId) => {
         throw new Error("Failed to delete category.");
     }
 };
+
+// Fetch all shipping partners
+export const fetchShippingPartners = async () => {
+    const querySnapshot = await getDocs(collection(firestore, "shippingPartners"));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  };
+  
+  // Add a new shipping partner
+  export const addShippingPartner = async (partnerData) => {
+    const docRef = await addDoc(collection(firestore, "shippingPartners"), partnerData);
+    return docRef.id;
+  };
+  
+  // Update a shipping partner
+  export const updateShippingPartner = async (id, partnerData) => {
+    const docRef = doc(firestore, "shippingPartners", id);
+    await updateDoc(docRef, partnerData);
+  };
+  
+  // Delete a shipping partner
+  export const deleteShippingPartner = async (id) => {
+    const docRef = doc(firestore, "shippingPartners", id);
+    await deleteDoc(docRef);
+  };
