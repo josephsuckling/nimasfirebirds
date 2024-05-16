@@ -64,10 +64,15 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setLoginSuccess("Login successful! Welcome back.");
-        setLoginError("");
-        resetLoginAttempts(email);
-        navigate('/dashboard');
+        const user = userCredential.user;
+        if (user.emailVerified) {
+          setLoginSuccess("Login successful! Welcome.");
+          setLoginError("");
+          resetLoginAttempts(email);
+          navigate('/dashboard');
+        } else {
+          setLoginError("Please verify your email to login.");
+        }
       })
       .catch(async (error) => {
         const errorCode = error.code;

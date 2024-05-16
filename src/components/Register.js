@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import "../css/Register.css";
 import App from "../FirebaseConfig";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigate } from "react-router-dom";  // Import useNavigate
-import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");;
   const [userMessage, setUserMessage] = useState(""); // State to store user feedback message
 
   const auth = getAuth();
+
   const navigate = useNavigate();  // Initialize the navigate function
 
   // Handle input change
@@ -30,9 +30,14 @@ function Register() {
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log(user); // You can remove this later
-        setUserMessage("Registration successful! Welcome to our application.");
-        navigate('/dashboard');  // Navigate to dashboard on success
+        sendEmailVerification(user)
+          .then(() => {
+            console.log("Verification email sent.");
+            setUserMessage("Registration successful! Please verify your email before logging in.");
+          })
+          .catch((error) => {
+            console.error("Error sending verfification email:", error);
+          });
       })
       .catch((error) => {
         const errorCode = error.code;
