@@ -1,5 +1,3 @@
-// src/components/AutoPartsHub.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAutoParts, fetchUserDetails, getCategories } from '../api/FirestoreAPI';
@@ -11,25 +9,51 @@ function AutoPartsHub() {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    shippingAddress: '',
+    billingAddress: '',
+    paymentMethod: '',
+    deliveryInstructions: ''
+  });
   const [orderDetails, setOrderDetails] = useState(null); // New state for order details
+  const [loading, setLoading] = useState(true); // Loading state for user details
   const navigate = useNavigate();
 
   const userID = localStorage.getItem("userID");
 
   useEffect(() => {
+    // Fetch auto parts
     fetchAutoParts().then(parts => {
       setAutoParts(parts);
     }).catch(error => {
       console.error("Error loading auto parts:", error);
     });
 
+    // Fetch categories
     getCategories().then(cats => {
       setCategories(cats);
     }).catch(error => {
       console.error("Error loading categories:", error);
     });
-  }, []);
+
+    // Fetch user details
+    if (userID) {
+      fetchUserDetails(userID).then(details => {
+        if (details) {
+          setUserDetails(details);
+        }
+        setLoading(false); // Set loading to false after user details are fetched
+      }).catch(error => {
+        console.error("Error loading user details:", error);
+        setLoading(false); // Set loading to false even if there's an error
+      });
+    } else {
+      setLoading(false); // Set loading to false if no userID is found
+    }
+  }, [userID]);
 
   const addToCart = (part) => {
     if (!part.inStock) {
@@ -61,9 +85,8 @@ function AutoPartsHub() {
     navigate('/create-autopart');
   };
 
-  const handleCheckout = async () => {
-    const details = await fetchUserDetails(userID);
-    setUserDetails(details);
+  const handleCheckout = () => {
+    if (loading) return;
 
     const purchaseOrderDate = new Date().toLocaleDateString();
     const orderNumber = `ORD-${Math.floor(Math.random() * 1000000)}`;
@@ -90,6 +113,10 @@ function AutoPartsHub() {
     alert("Order placed successfully!");
     setShowCheckout(false);
   };
+
+  if (loading) {
+    return <p>Loading...</p>; // Display loading message until user details are loaded
+  }
 
   return (
     <div className="auto-parts-hub">
@@ -167,14 +194,13 @@ function AutoPartsHub() {
               <p>Discounts and Promotions Applied: {orderDetails.discount}</p>
               <p>Sales Representative: {orderDetails.salesRep}</p>
               <p>Order Status: {orderDetails.orderStatus}</p>
-              <label>Customer Notes:
-                <textarea name="customerNotes" value={orderDetails.customerNotes} onChange={(e) => setOrderDetails({ ...orderDetails, customerNotes: e.target.value })} />
+              <label>Customer Notes:                <textarea name="customerNotes" value={orderDetails.customerNotes} onChange={(e) => setOrderDetails({ ...orderDetails, customerNotes: e.target.value })} />
               </label>
               <button type="submit">Place Order</button>
               <button type="button" onClick={() => setShowCheckout(false)}>Cancel</button>
             </form>
           ) : (
-            <p>Loading user details...</p>
+            <p>Loading order details...</p>
           )}
         </div>
       )}
@@ -183,3 +209,4 @@ function AutoPartsHub() {
 }
 
 export default AutoPartsHub;
+

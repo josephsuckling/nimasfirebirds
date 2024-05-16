@@ -13,7 +13,9 @@ import {
   deleteDoc,
   setDoc,
   getDocFromServer,
-  runTransaction
+  runTransaction,
+  serverTimestamp,
+  increment
 } from "firebase/firestore";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 
@@ -95,22 +97,6 @@ async function uploadImages(images) {
     }
   };
 
-
-
-export const incrementLoginAttempts = async (userId) => {
-    const userDocRef = doc(firestore, "loginAttempts", userId);
-  
-    try {
-      await runTransaction(firestore, async (transaction) => {
-        const userDoc = await transaction.get(userDocRef);
-        const currentAttempts = userDoc.data()?.attempts || 0;
-        transaction.set(userDocRef, { attempts: currentAttempts + 1 }, { merge: true });
-      });
-      console.log("Login attempts incremented successfully.");
-    } catch (error) {
-      console.error("Error incrementing login attempts: ", error);
-    }
-  };
 
   // Add a new category
 export const addCategory = async (categoryName) => {
@@ -210,4 +196,63 @@ export const fetchUserDetails = async (userID) => {
       console.error("Error updating user details:", error);
       throw new Error("Failed to update user details.");
     }
+  };
+// Function to get login attempts for a specific email
+export const getLoginAttempts = async (email) => {
+    const loginAttemptsDocRef = doc(firestore, "loginAttempts", email);
+    const loginAttemptsDoc = await getDoc(loginAttemptsDocRef);
+    if (loginAttemptsDoc.exists()) {
+      return loginAttemptsDoc.data();
+    } else {
+      return { attempts: 0, lastAttempt: null };
+    }
+  };
+  
+  // Function to increment login attempts for a specific email
+  export const incrementLoginAttempts = async (email) => {
+    const loginAttemptsDocRef = doc(firestore, "loginAttempts", email);
+    const loginAttemptsDoc = await getDoc(loginAttemptsDocRef);
+  
+    if (loginAttemptsDoc.exists()) {
+      await updateDoc(loginAttemptsDocRef, {
+        attempts: increment(1),
+        lastAttempt: new Date()
+      });
+    } else {
+      await setDoc(loginAttemptsDocRef, {
+        attempts: 1,
+        lastAttempt: new Date()
+      });
+    }
+  };
+  
+  // Function to reset login attempts for a specific email
+  export const resetLoginAttempts = async (email) => {
+    const loginAttemptsDocRef = doc(firestore, "loginAttempts", email);
+    await setDoc(loginAttemptsDocRef, {
+      attempts: 0,
+      lastAttempt: null
+    });
+  };
+  
+  // Get admin settings
+  export const getAdminSettings = async () => {
+    const settingsRef = doc(firestore, "settings", "loginConfig");
+    const settingsDoc = await getDoc(settingsRef);
+  
+    if (settingsDoc.exists()) {
+      return settingsDoc.data();
+    } else {
+      // Default settings
+      return {
+        maxAttempts: 3,
+        lockoutDuration: 15 // in minutes
+      };
+    }
+  };
+  
+  // Update admin settings
+  export const updateAdminSettings = async (settings) => {
+    const settingsRef = doc(firestore, "settings", "loginConfig");
+    await setDoc(settingsRef, settings, { merge: true });
   };
