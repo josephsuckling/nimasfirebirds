@@ -6,6 +6,7 @@ import {
   orderBy,
   where,
   onSnapshot,
+  getDoc,
   doc,
   updateDoc,
   addDoc,
@@ -65,6 +66,8 @@ async function uploadImages(images) {
     });
     return Promise.all(uploadPromises);
   }
+
+  
   
   /**
    * Stores auto part data in Firestore, including uploaded image URLs.
@@ -91,6 +94,8 @@ async function uploadImages(images) {
       throw new Error("Failed to save the auto part.");
     }
   };
+
+
 
 export const incrementLoginAttempts = async (userId) => {
     const userDocRef = doc(firestore, "loginAttempts", userId);
@@ -176,4 +181,33 @@ export const fetchShippingPartners = async () => {
   export const deleteShippingPartner = async (id) => {
     const docRef = doc(firestore, "shippingPartners", id);
     await deleteDoc(docRef);
+  };
+
+// Fetch user details
+export const fetchUserDetails = async (userID) => {
+    try {
+      const userDocRef = doc(firestore, "users", userID);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        return userDoc.data();
+      } else {
+        console.error("No such document!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      throw new Error("Failed to fetch user details.");
+    }
+  };
+  
+  // Update user details
+  export const updateUserDetails = async (userID, userDetails) => {
+    try {
+      const userDocRef = doc(firestore, "users", userID);
+      await setDoc(userDocRef, userDetails, { merge: true });
+      console.log("User details updated.");
+    } catch (error) {
+      console.error("Error updating user details:", error);
+      throw new Error("Failed to update user details.");
+    }
   };

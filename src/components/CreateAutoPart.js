@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/CreateAutoPart.css';
 import { saveAutoPart, getCategories } from '../api/FirestoreAPI';
 
@@ -14,10 +15,12 @@ function CreateAutoPart() {
         warranty: '',
         category: '',
         cost: '',
-        description: ''
+        description: '',
+        inStock: true
     });
     const [images, setImages] = useState([]);
     const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategoryData = async () => {
@@ -47,6 +50,7 @@ function CreateAutoPart() {
             const docId = await saveAutoPart(partData, images);
             console.log("Auto part created with ID:", docId);
             alert("Auto part created successfully!");
+            navigate('/autoparts-hub'); // Navigate to AutoPartsHub after successful submission
         } catch (error) {
             console.error("Error creating auto part:", error);
             alert("Failed to create auto part.");
@@ -60,7 +64,10 @@ function CreateAutoPart() {
                     <input type="text" name="name" value={partData.name} required onChange={handleInputChange} />
                 </label>
                 <label>Cost:
-                    <input type="text" name="cost" value={partData.cost} required onChange={handleInputChange} />
+                    <div className="input-with-prefix">
+                        <span>$</span>
+                        <input type="number" name="cost" value={partData.cost} required onChange={handleInputChange} />
+                    </div>
                 </label>
                 <label>Description:
                     <textarea name="description" value={partData.description} required onChange={handleInputChange} />
@@ -94,6 +101,9 @@ function CreateAutoPart() {
                         ))}
                     </select>
                 </label>
+                <label>In Stock:
+                    <input type="checkbox" name="inStock" checked={partData.inStock} onChange={(e) => setPartData({ ...partData, inStock: e.target.checked })} />
+                </label>
                 <label>Upload Images (up to 3):
                     <input type="file" multiple accept="image/*" onChange={handleFileChange} />
                 </label>
@@ -102,4 +112,5 @@ function CreateAutoPart() {
         </div>
     );
 }
+
 export default CreateAutoPart;

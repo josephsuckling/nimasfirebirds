@@ -1,8 +1,7 @@
 // src/components/Dashboard.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/Dashboard.css'; 
-
+import '../css/Dashboard.css';
 
 function Dashboard() {
   return (
