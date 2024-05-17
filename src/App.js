@@ -11,6 +11,8 @@ import AddShippingPartner from './components/AddShippingPartnerForm';
 import Settings from './components/Settings';
 import Logout from './components/Logout';
 import ProtectedRoute from './components/ProtectedRoute';
+import SetupPhoneVerification from './components/SetupPhoneVerification';
+import PhoneVerification from './components/PhoneVerification';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
               <Route path="/manage-categories" element={<CategoriesManager />} />
               <Route path="/manage-shipping" element={<ShippingPartners />} />
               <Route path="/add-shipping-partner" element={<AddShippingPartner />} />
+              <Route path="/setup-phone-verification" element={<SetupPhoneVerification />} />
+                    <Route path="/phone-verification" element={<PhoneVerification />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
           </Routes>

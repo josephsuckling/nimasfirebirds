@@ -69,7 +69,11 @@ function Login() {
           setLoginSuccess("Login successful! Welcome.");
           setLoginError("");
           resetLoginAttempts(email);
-          navigate('/dashboard');
+          if (user.phoneNumber) {
+            navigate('/phone-verification');
+          } else {
+            navigate('/dashboard');
+          }
         } else {
           setLoginError("Please verify your email to login.");
         }

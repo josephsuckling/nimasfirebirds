@@ -1,4 +1,3 @@
-// src/components/Settings.js
 
 import React, { useState, useEffect } from 'react';
 import { fetchUserDetails, updateUserDetails, getAdminSettings, updateAdminSettings } from '../api/FirestoreAPI';
@@ -7,6 +6,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import '../css/Settings.css'; // Import the CSS file
 
 function Settings() {
+  const [enable2FA, setEnable2FA] = useState(false);
   const [userDetails, setUserDetails] = useState({
     name: '',
     email: '',
@@ -100,6 +100,13 @@ function Settings() {
     return <p>Loading...</p>; // Display loading message until user details are loaded
   }
 
+  const handle2FAToggle = () => {
+    setEnable2FA(!enable2FA);
+    if (!enable2FA) {
+      navigate('/setup-phone-verification');
+    }
+  };
+
   return (
     <div className="settings">
       <h2>Update Your Details</h2>
@@ -127,7 +134,10 @@ function Settings() {
         </label>
         <button type="submit">Update Details</button>
       </form>
-
+      <h2>Settings</h2>
+      <button onClick={handle2FAToggle}>
+        {enable2FA ? "Disable 2FA" : "Enable 2FA"}
+      </button>
       {isAdmin && (
         <div className="admin-settings">
           <h2>Admin Settings</h2>
