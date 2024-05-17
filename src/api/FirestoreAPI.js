@@ -38,6 +38,10 @@ export const getCurrentUser = (setCurrentUser) => {
   });
 };
 
+export const checkAdminStatus = async (userID) => { 
+    return true;
+}
+
 
 /**
  * Fetches all auto parts from Firestore.
@@ -61,7 +65,7 @@ export const fetchAutoParts = async () => {
  * @param {File[]} images Array of image files to upload.
  * @returns {Promise<string[]>} Array of URLs of the uploaded images.
  */
-async function uploadImages(images) {
+export async function uploadImages(images) {
     const uploadPromises = images.map((image, index) => {
       const imageRef = ref(storage, `autoParts/${Date.now()}_${index}_${image.name}`);
       return uploadBytes(imageRef, image).then(() => getDownloadURL(imageRef));
